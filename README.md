@@ -123,7 +123,10 @@ Current behavior:
 If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
 
 #### Previews
-![Level](src/img/EvolutionLevelInfo/Level.jpg)
+<p align="center">
+  <img src="src/img/EvolutionLevelInfo/Level.jpg" alt="Evolution level info" width="600"><br>
+  <em>Shows the level required for a Pokémon to evolve on the card.</em>
+</p>
 
 ### Pokelike Move Tier Info
 **File:** `pokelike-move-tier-info.user.js`
@@ -141,9 +144,20 @@ Current behavior:
 If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
 
 #### Previews
-![Tier 1](src/img/MoveTierHover/Tier1.jpg)
-![Tier 2](src/img/MoveTierHover/Tier2.jpg)
-![Mastered](src/img/MoveTierHover/TierMastered.jpg)
+<p align="center">
+  <img src="src/img/MoveTierHover/Tier1.jpg" alt="Tier 1" width="600"><br>
+  <em>Tier 1 — Basic move tier shown in the hover panel.</em>
+</p>
+
+<p align="center">
+  <img src="src/img/MoveTierHover/Tier2.jpg" alt="Tier 2" width="600"><br>
+  <em>Tier 2 — Upgraded move tier with stronger move selection.</em>
+</p>
+
+<p align="center">
+  <img src="src/img/MoveTierHover/TierMastered.jpg" alt="Mastered" width="600"><br>
+  <em>Mastered — Final mastered state displayed in the hover panel.</em>
+</p>
 
 ## Notes
 
