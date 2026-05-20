@@ -130,7 +130,7 @@ Adds the move's tier within the pokemon's move box in the Pokelike hover popup o
 
 Current behavior:
 
-- Appends info to the existing `team-hover-card` popup, in `poke-move`.
+- Adds info to the existing `poke-move` div.
 - Shows the current move's tier.
 
 #### Install directly

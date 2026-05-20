@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Pokelike Move Tier Hover
 // @namespace    https://pokelike.xyz/
-// @version      0.1.2
-// @description  Shows current move tier inside the move box of the Pokelike hover popup
+// @version      0.3.1
+// @description  Shows current move tier inside the move box of the Pokelike hover popup, styled like the move power badge
 // @author       Moose
 // @match        https://pokelike.xyz/*
 // @match        https://www.pokelike.xyz/*
@@ -15,149 +15,130 @@
 (function () {
     'use strict';
 
-    if (window.__pokelikeMoveTierHoverInstalled) return;
+    if (window.__pokelikeMoveTierHoverInstalled) {
+        console.log('[Pokelike Move Tier Hover] Script already installed.');
+        return;
+    }
     window.__pokelikeMoveTierHoverInstalled = true;
 
     let popupObserver = null;
     let bootObserver = null;
+    let patchApplied = false;
     let refreshScheduled = false;
 
+    function getMoveTierLabel(pokemon) {
+        const tier = Math.max(0, Math.min(2, pokemon?.moveTier ?? 1));
+        return ['Tier 1', 'Tier 2', 'Mastered'][tier] ?? 'Tier 1';
+    }
+
     function injectStyles() {
-        if (document.getElementById('tm-pokelike-move-tier-hover-styles')) return;
+        if (document.getElementById('tm-pokelike-move-tier-hover-styles')) {
+            console.log('[Pokelike Move Tier Hover] Styles already injected.');
+            return;
+        }
 
         const style = document.createElement('style');
         style.id = 'tm-pokelike-move-tier-hover-styles';
         style.textContent = `
+      .poke-move {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        text-align: center;
+      }
+
       .poke-move-tier-inline {
-        display: block;
-        margin-top: 4px;
-        color: #b8afa2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        min-height: 16px;
+        padding: 2px 6px;
+        box-sizing: border-box;
+        border-radius: 4px;
         font-family: 'Press Start 2P', monospace;
-        font-size: 6px;
-        line-height: 1.5;
+        font-size: 7px;
+        line-height: 1;
+        letter-spacing: 0;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: var(--text-main, #181410);
+        background: var(--bg-light-panel, #dedad0);
+        border: 1px solid var(--border, #3a3a3a);
+      }
+
+      body.dark-mode .poke-move-tier-inline {
+        color: var(--text-main, #e0dcd0);
+        background: var(--bg-light-panel, #2a2a2a);
+        border-color: var(--border, #3a3a3a);
       }
     `;
         document.head.appendChild(style);
+        console.log('[Pokelike Move Tier Hover] Styles injected.');
     }
 
-    function getPopup() {
-        return document.getElementById('team-hover-card');
+    function findPokemonFromCard(card) {
+        const cardName = card?.querySelector('.poke-name')?.textContent?.trim();
+        if (!cardName) return null;
+
+        const team = window.state?.team;
+        if (!Array.isArray(team)) return null;
+
+        return team.find(p => (p?.nickname || p?.name) === cardName) || null;
     }
 
-    function getCurrentRun() {
-        try {
-            const raw = localStorage.getItem('poke_current_run');
-            if (!raw) return null;
-            const parsed = JSON.parse(raw);
-            return parsed && typeof parsed === 'object' ? parsed : null;
-        } catch (err) {
-            return null;
-        }
-    }
-
-    function getTeam() {
-        const run = getCurrentRun();
-        return Array.isArray(run?.team) ? run.team : [];
-    }
-
-    function normalizeName(name) {
-        return String(name || '')
-            .trim()
-            .toLowerCase()
-            .replace(/[.'’:\-\s]/g, '');
-    }
-
-    function extractCardName(cardEl) {
-        if (!cardEl) return null;
-
-        const selectors = [
-            '.poke-name',
-            '.poke-card-name',
-            '.poke-header-name',
-            'h3',
-            'h4'
-        ];
-
-        for (const selector of selectors) {
-            const el = cardEl.querySelector(selector);
-            const text = (el?.textContent || '').trim();
-            if (text) return text;
-        }
-
-        const text = (cardEl.textContent || '').trim();
-        if (!text) return null;
-
-        const match = text.match(/^[A-Z][A-Za-z0-9 .'\-??:]+/);
-        return match ? match[0].trim() : null;
-    }
-
-    function findTeamMemberByName(name) {
-        if (!name) return null;
-
-        const target = normalizeName(name);
-        return getTeam().find(member =>
-            normalizeName(member?.name) === target ||
-            normalizeName(member?.nickname) === target
-        ) || null;
-    }
-
-    function getMoveTier(member) {
-        if (!member || typeof member !== 'object') return null;
-        if (typeof member.moveTier === 'number') return member.moveTier;
-        if (typeof member.currentMoveTier === 'number') return member.currentMoveTier;
-        if (typeof member.moveTier === 'number') return member.moveTier;
-        return null;
-    }
-
-    function formatMoveTier(member) {
-        const raw = getMoveTier(member);
-        if (raw == null || Number.isNaN(raw)) return '?/?';
-
-        if (typeof member?.moveTier === 'number') {
-            const clamped = Math.max(0, Math.min(2, raw));
-            return `${clamped + 1}/3`;
-        }
-
-        return String(raw);
-    }
-
-    function findMoveBox(card) {
-        const selectors = [
-            '.poke-move',
-            '.move-box',
-            '.poke-card-move',
-            '.move-section',
-            '.pokemon-move'
-        ];
-
-        for (const selector of selectors) {
-            const el = card.querySelector(selector);
-            if (el) return el;
-        }
-
-        return null;
-    }
-
-    function injectMoveTier() {
-        const popup = getPopup();
-        if (!popup || popup.style.display === 'none' || !popup.innerHTML.trim()) return;
-
-        const card = popup.querySelector('.poke-card');
+    function ensureTierInExistingCard(card) {
         if (!card) return;
+        if (card.querySelector('.poke-move-tier-inline')) return;
 
-        card.querySelector('.poke-move-tier-inline')?.remove();
+        const moveName = card.querySelector('.move-name');
+        if (!moveName) return;
 
-        const moveBox = findMoveBox(card);
-        if (!moveBox) return;
+        const pokemon = findPokemonFromCard(card);
+        if (!pokemon) return;
 
-        const name = extractCardName(card);
-        const member = findTeamMemberByName(name);
-        if (!member) return;
+        moveName.insertAdjacentHTML(
+            'afterend',
+            `<div class="poke-move-tier-inline">${getMoveTierLabel(pokemon)}</div>`
+        );
+    }
 
-        const el = document.createElement('div');
-        el.className = 'poke-move-tier-inline';
-        el.textContent = `Move tier: ${formatMoveTier(member)}`;
-        moveBox.appendChild(el);
+    function patchRenderPokemonCard() {
+        if (patchApplied) {
+            console.log('[Pokelike Move Tier Hover] renderPokemonCard already patched.');
+            return true;
+        }
+
+        if (typeof window.renderPokemonCard !== 'function') {
+            console.warn('[Pokelike Move Tier Hover] renderPokemonCard not available yet.');
+            return false;
+        }
+
+        const originalRenderPokemonCard = window.renderPokemonCard;
+
+        window.renderPokemonCard = function patchedRenderPokemonCard(...args) {
+            const html = originalRenderPokemonCard.apply(this, args);
+            const pokemon = args[0];
+            const tierLabel = getMoveTierLabel(pokemon);
+
+            if (typeof html !== 'string' || !html.includes('class="poke-move"')) {
+                return html;
+            }
+
+            if (html.includes('poke-move-tier-inline')) {
+                return html;
+            }
+
+            return html.replace(
+                /(<div class="move-name">.*?<\/div>)/,
+                `$1<div class="poke-move-tier-inline">${tierLabel}</div>`
+            );
+        };
+
+        patchApplied = true;
+        console.log('[Pokelike Move Tier Hover] renderPokemonCard patched successfully.');
+        return true;
     }
 
     function scheduleRefresh() {
@@ -166,41 +147,81 @@
 
         requestAnimationFrame(() => {
             refreshScheduled = false;
-            injectMoveTier();
+
+            if (typeof window.renderTeamBar === 'function' && window.state?.team) {
+                try {
+                    window.renderTeamBar(window.state.team);
+                } catch (err) {
+                    console.warn('[Pokelike Move Tier Hover] Failed to refresh team bar.', err);
+                }
+            }
+
+            const hover = document.getElementById('team-hover-card');
+            if (hover && hover.style.display !== 'none') {
+                ensureTierInExistingCard(hover);
+            }
         });
     }
 
-    function installPopupObserver() {
-        const popup = getPopup();
-        if (!popup || popupObserver) return;
+    function observeHoverCard() {
+        if (popupObserver) {
+            console.log('[Pokelike Move Tier Hover] Hover observer already active.');
+            return;
+        }
+
+        const target = document.body || document.documentElement;
+        if (!target) {
+            console.warn('[Pokelike Move Tier Hover] Could not attach hover observer.');
+            return;
+        }
 
         popupObserver = new MutationObserver(() => {
-            scheduleRefresh();
+            const hover = document.getElementById('team-hover-card');
+            if (!hover) return;
+            if (hover.style.display === 'none') return;
+            ensureTierInExistingCard(hover);
         });
 
-        popupObserver.observe(popup, {
+        popupObserver.observe(target, {
             childList: true,
             subtree: true,
             attributes: true,
-            attributeFilter: ['style']
+            attributeFilter: ['style', 'class']
+        });
+
+        console.log('[Pokelike Move Tier Hover] Hover observer attached.');
+    }
+
+    function boot() {
+        injectStyles();
+
+        if (patchRenderPokemonCard()) {
+            observeHoverCard();
+            scheduleRefresh();
+
+            if (bootObserver) {
+                bootObserver.disconnect();
+                bootObserver = null;
+                console.log('[Pokelike Move Tier Hover] Boot observer disconnected.');
+            }
+
+            console.log('[Pokelike Move Tier Hover] Script is active.');
+            return true;
+        }
+
+        return false;
+    }
+
+    if (!boot()) {
+        console.log('[Pokelike Move Tier Hover] Waiting for page functions to become available...');
+
+        bootObserver = new MutationObserver(() => {
+            boot();
+        });
+
+        bootObserver.observe(document.documentElement, {
+            childList: true,
+            subtree: true
         });
     }
-
-    function bootstrap() {
-        injectStyles();
-        installPopupObserver();
-        scheduleRefresh();
-    }
-
-    bootstrap();
-
-    bootObserver = new MutationObserver(() => {
-        bootstrap();
-    });
-
-    if (document.body) {
-        bootObserver.observe(document.body, { childList: true, subtree: true });
-    }
-
-    console.log('Pokelike Move Tier Hover active');
 })();
