@@ -139,9 +139,9 @@ Current behavior:
 If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
 
 ### Previews
-![Tier 1](src/img/MoveTierHover/Tier1.png)
-![Tier 2](src/img/MoveTierHover/Tier2.png)
-![Mastered](src/img/MoveTierHover/TierMastered.png)
+![Tier 1](src/img/MoveTierHover/Tier1.jpg)
+![Tier 2](src/img/MoveTierHover/Tier2.jpg)
+![Mastered](src/img/MoveTierHover/TierMastered.jpg)
 ## Notes
 
 These scripts are unofficial browser-side enhancements. They only modify the page locally in the current browser session and do not change the website for other users.
