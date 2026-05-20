@@ -106,6 +106,38 @@ Notes:
 - If the site developers fix Fairy support in the future, the script will detect that and skip patching.
 - This script is intended to complement `pokelike-weakness-panel.user.js`, but it can also be used on its own.
 
+
+### Pokelike Evolution Level Info
+**File:** `pokelike-evolution-level-info.user.js`
+
+Adds the evolution level at the bottom of the Pokelike hover popup on `pokelike.xyz`.
+
+Current behavior:
+
+- Appends info to the existing `team-hover-card` popup.
+- Shows the pokemon's next evolution level, if it evolves.
+
+#### Install directly
+- [Install Pokelike Evolution Level Info](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-evolution-level-info.user.js)
+
+If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
+
+
+### Pokelike Move Tier Info
+**File:** `pokelike-move-tier-info.user.js`
+
+Adds the move's tier within the pokemon's move box in the Pokelike hover popup on `pokelike.xyz`.
+
+Current behavior:
+
+- Adds info to the existing `poke-move` div.
+- Shows the current move's tier.
+
+#### Install directly
+- [Install Pokelike Move Tier Info](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-move-tier-info.user.js)
+
+If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
+
 ## Notes
 
 These scripts are unofficial browser-side enhancements. They only modify the page locally in the current browser session and do not change the website for other users.
