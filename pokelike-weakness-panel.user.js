@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pokelike Weakness Panel
 // @namespace    https://pokelike.xyz/
-// @version      1.2.0
+// @version      1.2.1
 // @description  Adds weakness/resistance panels to Pokelike hover cards and trade rows
 // @author       VasariRulez
 // @match        https://pokelike.xyz/*
@@ -205,210 +205,223 @@
   }
 
   function injectStyles() {
-    if (document.getElementById('tm-pokelike-weakness-styles')) return;
+  if (document.getElementById('tm-pokelike-weakness-styles')) return;
 
-    const style = document.createElement('style');
-    style.id = 'tm-pokelike-weakness-styles';
-    style.textContent = `
-      #team-hover-card.weakness-layout-ready {
-        flex-direction: row !important;
-        align-items: flex-start !important;
-        gap: 10px !important;
-        width: auto !important;
-        max-width: min(92vw, 560px) !important;
-        background: transparent !important;
-        border: 0 !important;
-        box-shadow: none !important;
-        overflow: visible !important;
-        z-index: 99999 !important;
-      }
-
-      #team-hover-card.matchup-only {
-        width: 220px !important;
-        max-width: 220px !important;
-        background: transparent !important;
-        border: 0 !important;
-        box-shadow: none !important;
-        overflow: visible !important;
-        z-index: 99999 !important;
-      }
-
-      #team-hover-card .poke-card {
-        width: 170px !important;
-        flex: 0 0 170px !important;
-        margin: 0 !important;
-      }
-
-      .weakness-side-panel {
-        width: 220px;
-        flex: 0 0 220px;
-        background: rgba(34, 28, 20, 0.96);
-        border: 2px solid #5b5141;
-        box-shadow: 0 0 0 1px rgba(255,255,255,0.05) inset;
-        padding: 10px 8px;
-        color: #f3efe6;
-        font-family: 'Press Start 2P', monospace;
-      }
-
-      .weakness-title {
-        font-size: 8px;
-        line-height: 1.5;
-        color: #ffd54a;
-        margin-bottom: 6px;
-      }
-
-      .weakness-subtitle {
-        font-size: 6px;
-        line-height: 1.4;
-        color: #b8afa2;
-        margin-bottom: 8px;
-      }
-
-      .weakness-section + .weakness-section {
-        margin-top: 10px;
-        padding-top: 8px;
-        border-top: 1px solid rgba(255,255,255,0.08);
-      }
-
-      .weakness-list {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .weakness-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 6px;
-      }
-
-      .weakness-row-left {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        min-width: 0;
-      }
-
-      .weakness-side-panel .type-badge {
-        font-size: 7px !important;
-        padding: 2px 5px !important;
-        min-width: 56px;
-        text-align: center;
-      }
-
-      .weakness-type-badges {
-        display: inline-flex;
-        flex-wrap: wrap;
-        gap: 4px;
-        align-items: center;
-        vertical-align: middle;
-      }
-
-      .weakness-subtitle .weakness-type-badges {
-        margin-left: 4px;
-      }
-
-      .weakness-bucket {
-        font-size: 6px;
-        color: #b8afa2;
-        white-space: nowrap;
-      }
-
-      .weakness-mult {
-        font-size: 7px;
-        font-weight: bold;
-        min-width: 28px;
-        text-align: right;
-      }
-
-      .weakness-empty {
-        font-size: 6px;
-        line-height: 1.5;
-        color: #b8afa2;
-      }
-
-      .trade-member-row {
-        display: grid !important;
-        grid-template-columns: auto minmax(120px, 180px) minmax(220px, 1fr) auto !important;
-        align-items: center !important;
-        column-gap: 12px !important;
-      }
-
-      .trade-member-info {
-        min-width: 0;
-      }
-
-      .trade-member-fixed-weaknesses {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        min-width: 220px;
-      }
-
-      .trade-member-fixed-weaknesses .weakness-side-panel {
-        width: 100%;
-        max-width: 320px;
-        padding: 8px 7px;
-      }
-
-      .trade-member-fixed-weaknesses .weakness-title,
-      .trade-member-fixed-weaknesses .weakness-subtitle {
-        display: none;
-      }
-
-      .trade-member-fixed-weaknesses .weakness-section {
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-      }
-
-      .trade-member-fixed-weaknesses .weakness-list {
-        gap: 3px;
-      }
-
-      .trade-member-fixed-weaknesses .weakness-row {
-        gap: 4px;
-      }
-
-      .trade-member-fixed-weaknesses .weakness-row-left {
-        gap: 4px;
-      }
-
-      .trade-member-fixed-weaknesses .type-badge {
-        min-width: 50px;
-        font-size: 6px !important;
-        padding: 2px 4px !important;
-      }
-
-      .trade-member-fixed-weaknesses .weakness-bucket {
-        font-size: 5px;
-      }
-
-      .trade-member-fixed-weaknesses .weakness-mult {
-        font-size: 6px;
-        min-width: 24px;
-      }
-
-      @media (max-width: 900px) {
-        .trade-member-row {
-          grid-template-columns: auto 1fr auto !important;
-          align-items: start !important;
-        }
-
-        .trade-member-fixed-weaknesses {
-          grid-column: 2 / 4;
-          margin-top: 6px;
-          min-width: 0;
-        }
-
-        .trade-member-fixed-weaknesses .weakness-side-panel {
-          max-width: 100%;
-        }
-      }
-    `;
-    document.head.appendChild(style);
+  const style = document.createElement('style');
+  style.id = 'tm-pokelike-weakness-styles';
+  style.textContent = `
+  #team-hover-card.weakness-layout-ready {
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    width: auto !important;
+    max-width: min(92vw, 560px) !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    z-index: 99999 !important;
   }
+
+  #team-hover-card.matchup-only {
+    width: 220px !important;
+    max-width: 220px !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    z-index: 99999 !important;
+  }
+
+  #team-hover-card .poke-card {
+    width: 180px !important;
+    flex: 0 0 180px !important;
+    margin: 0 !important;
+  }
+
+  .weakness-side-panel {
+    width: 220px;
+    flex: 0 0 220px;
+    background: var(--bg-card, #e0dcd0);
+    border: 2px solid var(--border, #3a3a3a);
+    border-radius: 8px;
+    box-shadow: 3px 3px 0 0 #181410;
+    padding: 8px 9px;
+    color: var(--text-main, #181410);
+    font-family: 'Press Start 2P', monospace;
+  }
+
+  body.dark-mode .weakness-side-panel {
+    color: var(--text-main, #e0dcd0);
+    box-shadow: 3px 3px 0 0 #000;
+  }
+
+  .weakness-title {
+    font-size: 8px;
+    line-height: 1.6;
+    color: var(--accent, #c89820);
+    margin-bottom: 6px;
+  }
+
+  .weakness-subtitle {
+    font-size: 6px;
+    line-height: 1.6;
+    color: var(--text-dim, #909080);
+    margin-bottom: 8px;
+  }
+
+  .weakness-section + .weakness-section {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border, #3a3a3a);
+  }
+
+  .weakness-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .weakness-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .weakness-row-left {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  .weakness-side-panel .type-badge {
+    font-size: 7px !important;
+    padding: 2px 5px !important;
+    min-width: 56px;
+    text-align: center;
+  }
+
+  .weakness-type-badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+    vertical-align: middle;
+  }
+
+  .weakness-subtitle .weakness-type-badges {
+    margin-left: 4px;
+  }
+
+  .weakness-bucket {
+    font-size: 6px;
+    color: var(--text-dim, #909080);
+    white-space: nowrap;
+  }
+
+  .weakness-mult {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    min-width: 28px;
+    text-align: right;
+  }
+
+  .weakness-empty {
+    font-size: 6px;
+    line-height: 1.6;
+    color: var(--text-dim, #909080);
+  }
+
+  .trade-member-row {
+    display: grid !important;
+    grid-template-columns: auto minmax(120px, 180px) minmax(220px, 1fr) auto !important;
+    align-items: center !important;
+    column-gap: 12px !important;
+  }
+
+  .trade-member-info {
+    min-width: 0;
+  }
+
+  .trade-member-fixed-weaknesses {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 220px;
+  }
+
+  .trade-member-fixed-weaknesses .weakness-side-panel {
+    width: 100%;
+    max-width: 320px;
+    padding: 7px 8px;
+    background: color-mix(in srgb, var(--bg-card, #e0dcd0) 88%, transparent);
+    border-color: color-mix(in srgb, var(--border, #3a3a3a) 92%, transparent);
+    box-shadow: 2px 2px 0 0 #181410;
+  }
+
+  body.dark-mode .trade-member-fixed-weaknesses .weakness-side-panel {
+    box-shadow: 2px 2px 0 0 #000;
+  }
+
+  .trade-member-fixed-weaknesses .weakness-title,
+  .trade-member-fixed-weaknesses .weakness-subtitle {
+    display: none;
+  }
+
+  .trade-member-fixed-weaknesses .weakness-section {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  .trade-member-fixed-weaknesses .weakness-list {
+    gap: 3px;
+  }
+
+  .trade-member-fixed-weaknesses .weakness-row {
+    gap: 4px;
+  }
+
+  .trade-member-fixed-weaknesses .weakness-row-left {
+    gap: 4px;
+  }
+
+  .trade-member-fixed-weaknesses .type-badge {
+    min-width: 50px;
+    font-size: 6px !important;
+    padding: 2px 4px !important;
+  }
+
+  .trade-member-fixed-weaknesses .weakness-bucket {
+    font-size: 5px;
+  }
+
+  .trade-member-fixed-weaknesses .weakness-mult {
+    font-size: 6px;
+    min-width: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .trade-member-row {
+      grid-template-columns: auto 1fr auto !important;
+      align-items: start !important;
+    }
+
+    .trade-member-fixed-weaknesses {
+      grid-column: 2 / 4;
+      margin-top: 6px;
+      min-width: 0;
+    }
+
+    .trade-member-fixed-weaknesses .weakness-side-panel {
+      max-width: 100%;
+    }
+  }
+  `;
+  document.head.appendChild(style);
+}
 
   function extractTypesFromCard(cardEl) {
     return [...cardEl.querySelectorAll('.poke-types .type-badge')]
