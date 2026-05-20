@@ -124,7 +124,7 @@ If Tampermonkey does not open the install page automatically, open the script UR
 
 #### Previews
 <p align="center">
-  <img src="src/img/EvolutionLevelInfo/Level.jpg" alt="Evolution level info" width="600"><br>
+  <img src="src/img/EvolutionLevelInfo/Level.jpg" alt="Evolution level info" width="200"><br>
   <em>Shows the level required for a Pokémon to evolve on the card.</em>
 </p>
 
@@ -145,17 +145,17 @@ If Tampermonkey does not open the install page automatically, open the script UR
 
 #### Previews
 <p align="center">
-  <img src="src/img/MoveTierHover/Tier1.jpg" alt="Tier 1" width="600"><br>
+  <img src="src/img/MoveTierHover/Tier1.jpg" alt="Tier 1" width="200"><br>
   <em>Tier 1 — Basic move tier shown in the hover panel.</em>
 </p>
 
 <p align="center">
-  <img src="src/img/MoveTierHover/Tier2.jpg" alt="Tier 2" width="600"><br>
+  <img src="src/img/MoveTierHover/Tier2.jpg" alt="Tier 2" width="200"><br>
   <em>Tier 2 — Upgraded move tier with stronger move selection.</em>
 </p>
 
 <p align="center">
-  <img src="src/img/MoveTierHover/TierMastered.jpg" alt="Mastered" width="600"><br>
+  <img src="src/img/MoveTierHover/TierMastered.jpg" alt="Mastered" width="200"><br>
   <em>Mastered — Final mastered state displayed in the hover panel.</em>
 </p>
 
