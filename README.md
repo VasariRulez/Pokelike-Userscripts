@@ -59,7 +59,8 @@ If a script does not run correctly, check the following:
 
 ## Scripts
 
-### pokelike-weakness-panel.user.js
+### Pokelike Weakness Panel
+**File:** `pokelike-weakness-panel.user.js`
 
 Adds a weakness and resistance panel to the existing Pokelike interface on `pokelike.xyz`.
 
@@ -70,6 +71,7 @@ Current behavior:
 - Adds a fixed inline panel in trade rows next to the trade member info, so matchup data is always visible without hover.
 - Includes anti-refresh logic to avoid unnecessary DOM rebuilds when the interface updates.
 - Preserves the native popup visibility behavior controlled by the page JavaScript.
+- Can work alongside the Fairy fix script.
 #### Install directly
 
 Click the link below to install the script in Tampermonkey:
@@ -77,6 +79,33 @@ Click the link below to install the script in Tampermonkey:
 - [Install Pokelike Weakness Panel](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-weakness-panel.user.js)
 
 If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
+
+
+### Pokelike Fairy Fix
+**File:** `pokelike-fairy-fix.user.js`
+
+Adds the missing Fairy type interactions to Pokelike when the site's internal type chart does not support Fairy correctly.
+
+What it does:
+- Patches the live `TYPE_CHART` used by the page.
+- Adds the missing Fairy attack and defense matchups.
+- Runs only when Fairy support is missing or incomplete.
+- Does nothing if Pokelike already includes the correct Fairy data.
+
+Why this exists:
+- Fairy should be super effective against Dragon, Dark, and Fighting.
+- Fairy should resist Bug, Dark, and Fighting, and be immune to Dragon.
+- Fairy should be weak to Poison and Steel.
+- If the site treats Fairy as neutral `1x` in every matchup, this script fixes that behavior.
+
+#### Install directly
+- [Install Pokelike Fairy Fix](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-fairy-fix.user.js)
+
+Notes:
+- This script is designed to be safe to keep installed.
+- If the site developers fix Fairy support in the future, the script will detect that and skip patching.
+- This script is intended to complement `pokelike-weakness-panel.user.js`, but it can also be used on its own.
+
 ## Notes
 
 These scripts are unofficial browser-side enhancements. They only modify the page locally in the current browser session and do not change the website for other users.

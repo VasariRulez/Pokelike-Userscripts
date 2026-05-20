@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pokelike Weakness Panel
 // @namespace    https://pokelike.xyz/
-// @version      1.1.1
+// @version      1.2.0
 // @description  Adds weakness/resistance panels to Pokelike hover cards and trade rows
 // @author       VasariRulez
 // @match        https://pokelike.xyz/*
@@ -18,7 +18,7 @@
   if (window.__pokelikeWeaknessPatchInstalled) return;
   window.__pokelikeWeaknessPatchInstalled = true;
 
-  const TYPE_CHART = {
+  const EMBEDDED_TYPE_CHART = {
     Normal:{Normal:1,Fire:1,Water:1,Electric:1,Grass:1,Ice:1,Fighting:1,Poison:1,Ground:1,Flying:1,Psychic:1,Bug:1,Rock:0.5,Ghost:0,Dragon:1,Dark:1,Steel:0.5},
     Fire:{Normal:1,Fire:0.5,Water:0.5,Electric:1,Grass:2,Ice:2,Fighting:1,Poison:1,Ground:1,Flying:1,Psychic:1,Bug:2,Rock:0.5,Ghost:1,Dragon:0.5,Dark:1,Steel:2},
     Water:{Normal:1,Fire:2,Water:0.5,Electric:1,Grass:0.5,Ice:1,Fighting:1,Poison:1,Ground:2,Flying:1,Psychic:1,Bug:1,Rock:2,Ghost:1,Dragon:0.5,Dark:1,Steel:1},
@@ -38,8 +38,67 @@
     Steel:{Normal:1,Fire:0.5,Water:0.5,Electric:0.5,Grass:1,Ice:2,Fighting:1,Poison:1,Ground:1,Flying:1,Psychic:1,Bug:1,Rock:2,Ghost:1,Dragon:1,Dark:1,Steel:0.5}
   };
 
-  const ATTACK_TYPES = Object.keys(TYPE_CHART);
-  const DEFENDER_TYPES = Object.keys(TYPE_CHART);
+  function getLiveTypeChart() {
+    try {
+      if (typeof window.TYPE_CHART !== 'undefined' && window.TYPE_CHART && typeof window.TYPE_CHART === 'object') {
+        return window.TYPE_CHART;
+      }
+      if (typeof globalThis.TYPE_CHART !== 'undefined' && globalThis.TYPE_CHART && typeof globalThis.TYPE_CHART === 'object') {
+        return globalThis.TYPE_CHART;
+      }
+      if (typeof TYPE_CHART !== 'undefined' && TYPE_CHART && typeof TYPE_CHART === 'object') {
+        return TYPE_CHART;
+      }
+    } catch (err) {}
+    return null;
+  }
+
+  function hasFairySupport(chart) {
+    if (!chart || typeof chart !== 'object') return false;
+    if (!Object.hasOwn(chart, 'Fairy') || !chart.Fairy || typeof chart.Fairy !== 'object') return false;
+    if (!Object.hasOwn(chart, 'Dragon') || !chart.Dragon || typeof chart.Dragon !== 'object') return false;
+    if (!Object.hasOwn(chart, 'Poison') || !chart.Poison || typeof chart.Poison !== 'object') return false;
+    if (!Object.hasOwn(chart, 'Steel') || !chart.Steel || typeof chart.Steel !== 'object') return false;
+
+    return (
+      chart.Fairy.Dragon === 2 &&
+      chart.Dragon.Fairy === 0 &&
+      chart.Poison.Fairy === 2 &&
+      chart.Steel.Fairy === 2
+    );
+  }
+
+  function resolveTypeChartState() {
+    const liveChart = getLiveTypeChart();
+
+    if (liveChart) {
+      const fairyReady = hasFairySupport(liveChart);
+      console.log('[Pokelike Weakness Panel] Live TYPE_CHART found. Fairy support:', fairyReady);
+      return {
+        chart: liveChart,
+        fairyReady,
+        source: 'page'
+      };
+    }
+
+    const fairyReady = hasFairySupport(EMBEDDED_TYPE_CHART);
+    console.warn('[Pokelike Weakness Panel] Live TYPE_CHART not accessible. Falling back to embedded chart. Fairy support:', fairyReady);
+    return {
+      chart: EMBEDDED_TYPE_CHART,
+      fairyReady,
+      source: 'embedded'
+    };
+  }
+
+  let TYPE_CHART_STATE = resolveTypeChartState();
+  let ACTIVE_TYPE_CHART = TYPE_CHART_STATE.chart;
+
+  if (!TYPE_CHART_STATE.fairyReady) {
+    console.warn('[Pokelike Weakness Panel] Fairy is not fully supported in the active chart. Install or enable the Fairy fix script if needed.');
+  }
+
+  const getAttackTypes = () => Object.keys(ACTIVE_TYPE_CHART);
+  const getDefenderTypes = () => Object.keys(ACTIVE_TYPE_CHART);
 
   let popup = null;
   let popupRefreshScheduled = false;
@@ -67,10 +126,10 @@
   }
 
   function calcDefenseEffectiveness(defenderTypes) {
-    return ATTACK_TYPES.map(attacking => {
+    return getAttackTypes().map(attacking => {
       let mult = 1;
       defenderTypes.forEach(def => {
-        mult *= TYPE_CHART[attacking]?.[normalizeType(def)] ?? 1;
+        mult *= ACTIVE_TYPE_CHART[attacking]?.[normalizeType(def)] ?? 1;
       });
       return { attacking, mult };
     }).sort((a, b) => b.mult - a.mult);
@@ -78,10 +137,10 @@
 
   function calcAttackMatchups(moveType) {
     const atk = normalizeType(moveType);
-    if (!atk || !TYPE_CHART[atk]) return [];
-    return DEFENDER_TYPES.map(def => ({
+    if (!atk || !ACTIVE_TYPE_CHART[atk]) return [];
+    return getDefenderTypes().map(def => ({
       defending: def,
-      mult: TYPE_CHART[atk][def] ?? 1
+      mult: ACTIVE_TYPE_CHART[atk]?.[def] ?? 1
     }))
       .filter(r => r.mult !== 1)
       .sort((a, b) => {
