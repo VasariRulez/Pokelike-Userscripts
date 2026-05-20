@@ -76,7 +76,7 @@ Current behavior:
 
 Click the link below to install the script in Tampermonkey:
 
-- [Install Pokelike Weakness Panel](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-weakness-panel.user.js)
+[![Install Weakness Panel](https://img.shields.io/badge/Install-Weakness%20Panel-2ea44f?style=for-the-badge)](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-weakness-panel.user.js)
 
 If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
 
@@ -85,41 +85,41 @@ If Tampermonkey does not open the install page automatically, open the script UR
 <table>
   <tr>
     <td align="center">
-      <img src="src/img/WeaknessPanel/TeamHoverCard.jpg" alt="Team hover card" width="420"><br>
+      <img src="src/img/WeaknessPanel/TeamHoverCard.jpg" alt="Pokelike team hover card showing a Pokemon summary and type effectiveness panel in the browser page" width="420"><br>
       <em>Weaknesses and move matchups in the team hover card.</em>
     </td>
     <td align="center">
-      <img src="src/img/WeaknessPanel/TradeOffer.jpg" alt="Trade offer" width="420"><br>
+      <img src="src/img/WeaknessPanel/TradeOffer.jpg" alt="Pokelike trade offer view with a fixed weakness info panel beside trade member details in the page interface" width="420"><br>
       <em>Weakness info shown in trade offers.</em>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="src/img/WeaknessPanel/CatchCard.jpg" alt="Catch card" width="420"><br>
+      <img src="src/img/WeaknessPanel/CatchCard.jpg" alt="Pokelike catch choice card showing a type matchup panel added below the Pokemon details in the game interface" width="420"><br>
       <em>Panel added to catch choices.</em>
     </td>
     <td align="center">
-      <img src="src/img/WeaknessPanel/PokemonReceiveCard.jpg" alt="Pokémon receive card" width="420"><br>
+      <img src="src/img/WeaknessPanel/PokemonReceiveCard.jpg" alt="Pokelike reward card showing Pokemon receive screen with matchup information displayed in the card area" width="420"><br>
       <em>Matchup info on reward cards.</em>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="src/img/WeaknessPanel/StarterScreen.jpg" alt="Starter screen" width="420"><br>
+      <img src="src/img/WeaknessPanel/StarterScreen.jpg" alt="Pokelike starter selection screen showing Pokemon comparison with weakness data visible before choosing" width="420"><br>
       <em>Better starter comparison before picking.</em>
     </td>
     <td align="center">
-      <img src="src/img/WeaknessPanel/SwapScreen.jpg" alt="Swap screen" width="420"><br>
+      <img src="src/img/WeaknessPanel/SwapScreen.jpg" alt="Pokelike swap screen showing swap decision interface with visible weakness information for Pokemon options" width="420"><br>
       <em>Faster swap decisions with visible weaknesses.</em>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="src/img/WeaknessPanel/Elite4.jpg" alt="Elite Four screen" width="420"><br>
+      <img src="src/img/WeaknessPanel/Elite4.jpg" alt="Pokelike Elite Four preparation screen showing extra matchup help and type effectiveness data on the interface" width="420"><br>
       <em>Extra matchup help during Elite Four prep.</em>
     </td>
     <td align="center">
-      <img src="src/img/WeaknessPanel/FairyFix.jpg" alt="Fairy fix" width="420"><br>
+      <img src="src/img/WeaknessPanel/FairyFix.jpg" alt="Pokelike interface showing corrected Fairy type matchup support and updated effectiveness values" width="420"><br>
       <em>Correct Fairy-type matchup support.</em>
     </td>
   </tr>
@@ -143,7 +143,7 @@ Why this exists:
 - If the site treats Fairy as neutral `1x` in every matchup, this script fixes that behavior.
 
 #### Install directly
-- [Install Pokelike Fairy Fix](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-fairy-fix.user.js)
+[![Install Fairy Fix](https://img.shields.io/badge/Install-Fairy%20Fix-2ea44f?style=for-the-badge)](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-fairy-fix.user.js)
 
 Notes:
 - This script is designed to be safe to keep installed.
@@ -162,14 +162,14 @@ Current behavior:
 - Shows the pokemon's next evolution level, if it evolves.
 
 #### Install directly
-- [Install Pokelike Evolution Level Info](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-evolution-level-info.user.js)
+[![Install Evolution Level Info](https://img.shields.io/badge/Install-Evolution%20Level%20Info-2ea44f?style=for-the-badge)](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-evolution-level-info.user.js)
 
 If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
 
 #### Previews
 
 <p align="center">
-  <img src="src/img/EvolutionLevelInfo/Level.jpg" alt="Evolution level info" width="260"><br>
+  <img src="src/img/EvolutionLevelInfo/Level.jpg" alt="Pokelike hover card showing Pokemon evolution level information appended at the bottom of the team popup" width="260"><br>
   <em>Displays the evolution level on the Pokémon card.</em>
 </p>
 
@@ -184,7 +184,7 @@ Current behavior:
 - Shows the current move's tier.
 
 #### Install directly
-- [Install Pokelike Move Tier Info](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-move-tier-info.user.js)
+[![Install Move Tier Info](https://img.shields.io/badge/Install-Move%20Tier%20Info-2ea44f?style=for-the-badge)](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-move-tier-info.user.js)
 
 If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
 
@@ -193,15 +193,15 @@ If Tampermonkey does not open the install page automatically, open the script UR
 <table>
   <tr>
     <td align="center">
-      <img src="src/img/MoveTierHover/Tier1.jpg" alt="Tier 1" width="220"><br>
+      <img src="src/img/MoveTierHover/Tier1.jpg" alt="Pokelike move tier hover panel showing a move labeled tier 1 inside the Pokemon move box" width="220"><br>
       <em>Tier 1 — Basic move tier shown in the hover panel.</em>
     </td>
     <td align="center">
-      <img src="src/img/MoveTierHover/Tier2.jpg" alt="Tier 2" width="220"><br>
+      <img src="src/img/MoveTierHover/Tier2.jpg" alt="Pokelike move tier hover panel showing a move labeled tier 2 inside the Pokemon move box" width="220"><br>
       <em>Tier 2 — Upgraded move tier with stronger move selection.</em>
     </td>
     <td align="center">
-      <img src="src/img/MoveTierHover/TierMastered.jpg" alt="Mastered" width="220"><br>
+      <img src="src/img/MoveTierHover/TierMastered.jpg" alt="Pokelike move tier hover panel showing a mastered move state inside the Pokemon move box" width="220"><br>
       <em>Mastered — Final mastered state displayed in the hover panel.</em>
     </td>
   </tr>
