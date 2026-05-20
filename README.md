@@ -82,42 +82,42 @@ If Tampermonkey does not open the install page automatically, open the script UR
 
 #### Previews
 <p align="center">
-  <img src="src/img/WeaknessPanel/TeamHoverCard.jpg" alt="Weakness panel on team hover card" width="700"><br>
+  <img src="src/img/WeaknessPanel/TeamHoverCard.jpg" alt="Weakness panel on team hover card" width="400"><br>
   <em>Shows weaknesses and move matchups directly in the team hover card.</em>
 </p>
 
 <p align="center">
-  <img src="src/img/WeaknessPanel/TradeOffer.jpg" alt="Weakness panel on trade offer" width="700"><br>
+  <img src="src/img/WeaknessPanel/TradeOffer.jpg" alt="Weakness panel on trade offer" width="400"><br>
   <em>Displays weaknesses in trade offers to compare picks more quickly.</em>
 </p>
 
 <p align="center">
-  <img src="src/img/WeaknessPanel/CatchCard.jpg" alt="Weakness panel on catch card" width="700"><br>
+  <img src="src/img/WeaknessPanel/CatchCard.jpg" alt="Weakness panel on catch card" width="400"><br>
   <em>Adds the panel to catch choices for faster battle planning.</em>
 </p>
 
 <p align="center">
-  <img src="src/img/WeaknessPanel/PokemonReceiveCard.jpg" alt="Weakness panel on received Pokémon card" width="700"><br>
+  <img src="src/img/WeaknessPanel/PokemonReceiveCard.jpg" alt="Weakness panel on received Pokémon card" width="400"><br>
   <em>Shows matchup information when receiving a Pokémon reward.</em>
 </p>
 
 <p align="center">
-  <img src="src/img/WeaknessPanel/StarterScreen.jpg" alt="Weakness panel on starter screen" width="700"><br>
+  <img src="src/img/WeaknessPanel/StarterScreen.jpg" alt="Weakness panel on starter screen" width="400"><br>
   <em>Helps compare starter weaknesses before choosing your run opener.</em>
 </p>
 
 <p align="center">
-  <img src="src/img/WeaknessPanel/SwapScreen.jpg" alt="Weakness panel on swap screen" width="700"><br>
+  <img src="src/img/WeaknessPanel/SwapScreen.jpg" alt="Weakness panel on swap screen" width="400"><br>
   <em>Makes swap decisions easier by exposing defensive matchups at a glance.</em>
 </p>
 
 <p align="center">
-  <img src="src/img/WeaknessPanel/Elite4.jpg" alt="Weakness panel on Elite Four prep screen" width="700"><br>
+  <img src="src/img/WeaknessPanel/Elite4.jpg" alt="Weakness panel on Elite Four prep screen" width="400"><br>
   <em>Adds matchup support during Elite Four preparation.</em>
 </p>
 
 <p align="center">
-  <img src="src/img/WeaknessPanel/FairyFix.jpg" alt="Fairy type fix support" width="700"><br>
+  <img src="src/img/WeaknessPanel/FairyFix.jpg" alt="Fairy type fix support" width="400"><br>
   <em>Supports Fairy matchups correctly when the Fairy fix is available.</em>
 </p>
 
