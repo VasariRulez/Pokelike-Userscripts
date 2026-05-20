@@ -80,6 +80,46 @@ Click the link below to install the script in Tampermonkey:
 
 If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
 
+#### Previews
+<p align="center">
+  <img src="src/img/WeaknessPanel/TeamHoverCard.jpg" alt="Weakness panel on team hover card" width="400"><br>
+  <em>Shows weaknesses and move matchups directly in the team hover card.</em>
+</p>
+
+<p align="center">
+  <img src="src/img/WeaknessPanel/TradeOffer.jpg" alt="Weakness panel on trade offer" width="400"><br>
+  <em>Displays weaknesses in trade offers to compare picks more quickly.</em>
+</p>
+
+<p align="center">
+  <img src="src/img/WeaknessPanel/CatchCard.jpg" alt="Weakness panel on catch card" width="400"><br>
+  <em>Adds the panel to catch choices for faster battle planning.</em>
+</p>
+
+<p align="center">
+  <img src="src/img/WeaknessPanel/PokemonReceiveCard.jpg" alt="Weakness panel on received Pokémon card" width="400"><br>
+  <em>Shows matchup information when receiving a Pokémon reward.</em>
+</p>
+
+<p align="center">
+  <img src="src/img/WeaknessPanel/StarterScreen.jpg" alt="Weakness panel on starter screen" width="400"><br>
+  <em>Helps compare starter weaknesses before choosing your run opener.</em>
+</p>
+
+<p align="center">
+  <img src="src/img/WeaknessPanel/SwapScreen.jpg" alt="Weakness panel on swap screen" width="400"><br>
+  <em>Makes swap decisions easier by exposing defensive matchups at a glance.</em>
+</p>
+
+<p align="center">
+  <img src="src/img/WeaknessPanel/Elite4.jpg" alt="Weakness panel on Elite Four prep screen" width="400"><br>
+  <em>Adds matchup support during Elite Four preparation.</em>
+</p>
+
+<p align="center">
+  <img src="src/img/WeaknessPanel/FairyFix.jpg" alt="Fairy type fix support" width="400"><br>
+  <em>Supports Fairy matchups correctly when the Fairy fix is available.</em>
+</p>
 
 ### Pokelike Fairy Fix
 **File:** `pokelike-fairy-fix.user.js`
@@ -122,6 +162,11 @@ Current behavior:
 
 If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
 
+#### Previews
+<p align="center">
+  <img src="src/img/EvolutionLevelInfo/Level.jpg" alt="Evolution level info" width="200"><br>
+  <em>Shows the level required for a Pokémon to evolve on the card.</em>
+</p>
 
 ### Pokelike Move Tier Info
 **File:** `pokelike-move-tier-info.user.js`
@@ -137,6 +182,22 @@ Current behavior:
 - [Install Pokelike Move Tier Info](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-move-tier-info.user.js)
 
 If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
+
+#### Previews
+<p align="center">
+  <img src="src/img/MoveTierHover/Tier1.jpg" alt="Tier 1" width="200"><br>
+  <em>Tier 1 — Basic move tier shown in the hover panel.</em>
+</p>
+
+<p align="center">
+  <img src="src/img/MoveTierHover/Tier2.jpg" alt="Tier 2" width="200"><br>
+  <em>Tier 2 — Upgraded move tier with stronger move selection.</em>
+</p>
+
+<p align="center">
+  <img src="src/img/MoveTierHover/TierMastered.jpg" alt="Mastered" width="200"><br>
+  <em>Mastered — Final mastered state displayed in the hover panel.</em>
+</p>
 
 ## Notes
 
