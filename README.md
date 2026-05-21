@@ -207,6 +207,39 @@ If Tampermonkey does not open the install page automatically, open the script UR
   </tr>
 </table>
 
+### Pokelike Team Slot Edit Nickname Button
+**File:** `pokelike-pokemon-nickname-edit.user.js`
+
+Adds a small **✎** button to each Pokémon slot in your team bar on `pokelike.xyz` to edit nickname.
+
+What it does:
+
+- Shows a small edit button directly on each team slot.
+- Lets you quickly change a Pokémon's nickname without touching the main game code.
+- Opens a simple rename window when the button is clicked.
+- Works with the existing drag-and-drop team bar without interfering with item clicks.
+- Updates the team bar immediately after saving the new nickname.
+
+#### Install directly
+[![Install Pokelike Team Slot Edit Nickname Button](https://img.shields.io/badge/Install-Pokelike%20Team%20Slot%20Edit%20Nickname%20Button-2ea44f?style=for-the-badge)](https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-pokemon-nickname-edit.user.js)
+
+If Tampermonkey does not open the install page automatically, open the script URL manually from the browser or use **Tampermonkey → Dashboard → Utilities → Import from URL** and paste the same link.
+
+#### Previews
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="src/img/EditNickname/Pencil.jpg" alt="Pokelike team slot with a small pencil button used to edit the Pokémon nickname" width="420"><br>
+      <em>Adds a small pencil button to each team slot for quick nickname editing.</em>
+    </td>
+    <td align="center">
+      <img src="src/img/EditNickname/Modal.jpg" alt="Pokelike nickname edit modal opened from the team slot button" width="420"><br>
+      <em>Opens a simple rename window to change the Pokémon nickname.</em>
+    </td>
+  </tr>
+</table>
+
 ## Notes
 
 These scripts are unofficial browser-side enhancements. They only modify the page locally in the current browser session and do not change the website for other users.
