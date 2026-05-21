@@ -1,22 +1,22 @@
 // ==UserScript==
-// @name         Pokelike Evolution Level Hover
+// @name         Pokelike Evolution Level Text
 // @namespace    https://pokelike.xyz/
-// @version      0.1.1
-// @description  Shows evolution level at the bottom of the Pokelike hover popup
+// @version      0.6.0
+// @description  Shows centered "Evolves at lvl. X" text on Pokemon cards
 // @author       Moose
 // @match        https://pokelike.xyz/*
 // @match        https://www.pokelike.xyz/*
 // @run-at       document-idle
 // @grant        none
-// @downloadURL  https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-evolution-level-info.user.js
-// @updateURL    https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-evolution-level-info.user.js
+// @downloadURL  https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-evolution-level-text.user.js
+// @updateURL    https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-evolution-level-text.user.js
 // ==/UserScript==
 
 (function () {
     'use strict';
 
-    if (window.__pokelikeEvolutionLevelHoverInstalled) return;
-    window.__pokelikeEvolutionLevelHoverInstalled = true;
+    if (window.__pokelikeEvolutionLevelTextInstalled) return;
+    window.__pokelikeEvolutionLevelTextInstalled = true;
 
     const EVOLUTIONS = {
         1: { into: 2, level: 16, name: 'Ivysaur' }, 2: { into: 3, level: 32, name: 'Venusaur' }, 4: { into: 5, level: 16, name: 'Charmeleon' },
@@ -120,157 +120,202 @@
         633: { into: 634, level: 50, name: 'Zweilous' }, 634: { into: 635, level: 64, name: 'Hydreigon' }, 636: { into: 637, level: 59, name: 'Volcarona' }
     };
 
-    let popupObserver = null;
-    let bootObserver = null;
-    let refreshScheduled = false;
+    let observer = null;
+    let refreshQueued = false;
 
     function injectStyles() {
-        if (document.getElementById('tm-pokelike-evolution-level-hover-styles')) return;
+        if (document.getElementById('tm-pokelike-evo-text-styles')) return;
 
         const style = document.createElement('style');
-        style.id = 'tm-pokelike-evolution-level-hover-styles';
+        style.id = 'tm-pokelike-evo-text-styles';
         style.textContent = `
-      .poke-evolution-level-inline {
-        margin-top: 4px;
-        color: #ffd54a;
-        font-family: 'Press Start 2P', monospace;
-        font-size: 6px;
-        line-height: 1.5;
-      }
-    `;
+            .poke-evo-line {
+                width: 100%;
+                margin-top: 2px;
+                text-align: center;
+                font-family: "Press Start 2P", monospace;
+                font-size: 6px;
+                color: var(--text-dim);
+                line-height: 1.6;
+                align-self: stretch;
+                white-space: normal;
+                word-break: break-word;
+            }
+        `;
         document.head.appendChild(style);
     }
 
-    function getPopup() {
-        return document.getElementById('team-hover-card');
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     }
 
-    function getCurrentRun() {
-        try {
-            const raw = localStorage.getItem('poke_current_run');
-            if (!raw) return null;
-            const parsed = JSON.parse(raw);
-            return parsed && typeof parsed === 'object' ? parsed : null;
-        } catch (err) {
-            return null;
+    function patchRenderPokemonCard() {
+        if (typeof window.renderPokemonCard !== 'function') return false;
+        if (window.__pokelikeEvolutionRenderPatched) return true;
+
+        const original = window.renderPokemonCard;
+
+        window.renderPokemonCard = function patchedRenderPokemonCard(...args) {
+            const pokemon = args[0];
+            const html = original.apply(this, args);
+
+            if (typeof html !== 'string' || !pokemon || !html.includes('class="poke-card')) {
+                return html;
+            }
+
+            if (html.includes('data-evo-species-id=')) {
+                return html;
+            }
+
+            const speciesId = Number(pokemon.speciesId);
+            const level = Number(pokemon.level ?? 0);
+            const speciesName = escapeHtml(pokemon.name || '');
+            const nickname = escapeHtml(pokemon.nickname || '');
+
+            return html.replace(
+                /<div class="poke-card([^"]*)"/,
+                `<div class="poke-card$1" data-evo-species-id="${Number.isFinite(speciesId) ? speciesId : ''}" data-evo-level="${Number.isFinite(level) ? level : ''}" data-evo-name="${speciesName}" data-evo-nickname="${nickname}"`
+            );
+        };
+
+        window.__pokelikeEvolutionRenderPatched = true;
+        return true;
+    }
+
+    function getSpeciesId(cardEl) {
+        const fromData = Number(cardEl?.dataset?.evoSpeciesId);
+        if (Number.isFinite(fromData) && fromData > 0) return fromData;
+
+        const spriteSrc = cardEl?.querySelector('.poke-sprite')?.getAttribute('src') || '';
+        const match = spriteSrc.match(/\/pokemon\/(\d+)\.png(?:\?|$)/i);
+        return match ? Number(match[1]) : null;
+    }
+
+    function getLevel(cardEl) {
+        const fromData = Number(cardEl?.dataset?.evoLevel);
+        if (Number.isFinite(fromData) && fromData > 0) return fromData;
+
+        const text = cardEl?.querySelector('.poke-level')?.textContent || '';
+        const match = text.match(/\d+/);
+        return match ? Number(match[0]) : null;
+    }
+
+    function buildEvolutionText(cardEl) {
+        const speciesId = getSpeciesId(cardEl);
+        const currentLevel = getLevel(cardEl);
+        const evolution = speciesId ? EVOLUTIONS[speciesId] || null : null;
+
+        if (!evolution || typeof evolution.level !== 'number') return null;
+
+        const line = document.createElement('div');
+        line.className = 'poke-evo-line';
+        line.textContent = `Evolves at lvl. ${evolution.level}`;
+
+        if (typeof currentLevel === 'number' && currentLevel >= evolution.level) {
+            line.textContent = `Evolves at lvl. ${evolution.level}`;
+        }
+
+        return line;
+    }
+
+    function insertEvolutionText(cardEl) {
+        if (!cardEl || !(cardEl instanceof Element)) return;
+
+        cardEl.querySelector(':scope > .poke-evo-line')?.remove();
+
+        const line = buildEvolutionText(cardEl);
+        if (!line) return;
+
+        const moveBox = cardEl.querySelector(':scope > .poke-move');
+        const hpBox = cardEl.querySelector(':scope > .poke-hp');
+
+        if (moveBox) {
+            moveBox.insertAdjacentElement('afterend', line);
+        } else if (hpBox) {
+            hpBox.insertAdjacentElement('afterend', line);
+        } else {
+            cardEl.appendChild(line);
         }
     }
 
-    function getTeam() {
-        const run = getCurrentRun();
-        return Array.isArray(run?.team) ? run.team : [];
+    function refreshAllCards(root = document) {
+        const cards = root.querySelectorAll?.('.poke-card');
+        if (!cards?.length) return;
+        cards.forEach(insertEvolutionText);
     }
 
-    function normalizeName(name) {
-        return String(name || '')
-            .trim()
-            .toLowerCase()
-            .replace(/[.'’:\-\s]/g, '');
-    }
-
-    function extractCardName(cardEl) {
-        if (!cardEl) return null;
-
-        const selectors = [
-            '.poke-name',
-            '.poke-card-name',
-            '.poke-header-name',
-            'h3',
-            'h4'
-        ];
-
-        for (const selector of selectors) {
-            const el = cardEl.querySelector(selector);
-            const text = (el?.textContent || '').trim();
-            if (text) return text;
-        }
-
-        const text = (cardEl.textContent || '').trim();
-        if (!text) return null;
-
-        const match = text.match(/^[A-Z][A-Za-z0-9 .'\-??:]+/);
-        return match ? match[0].trim() : null;
-    }
-
-    function findTeamMemberByName(name) {
-        if (!name) return null;
-
-        const target = normalizeName(name);
-        return getTeam().find(member =>
-            normalizeName(member?.name) === target ||
-            normalizeName(member?.nickname) === target
-        ) || null;
-    }
-
-    function getNextEvolution(member) {
-        if (!member?.speciesId) return null;
-        return EVOLUTIONS[Number(member.speciesId)] || null;
-    }
-
-    function injectEvolutionLevel() {
-        const popup = getPopup();
-        if (!popup || popup.style.display === 'none' || !popup.innerHTML.trim()) return;
-
-        const card = popup.querySelector('.poke-card');
-        if (!card) return;
-
-        card.querySelector('.poke-evolution-level-inline')?.remove();
-
-        const name = extractCardName(card);
-        const member = findTeamMemberByName(name);
-        if (!member) return;
-
-        const evolution = getNextEvolution(member);
-        if (!evolution || typeof evolution.level !== 'number') return;
-
-        const el = document.createElement('div');
-        el.className = 'poke-evolution-level-inline';
-        el.textContent = `Evolves at lvl. ${evolution.level}`;
-
-        card.appendChild(el);
-    }
-
-    function scheduleRefresh() {
-        if (refreshScheduled) return;
-        refreshScheduled = true;
+    function queueRefresh(root = document) {
+        if (refreshQueued) return;
+        refreshQueued = true;
 
         requestAnimationFrame(() => {
-            refreshScheduled = false;
-            injectEvolutionLevel();
+            refreshQueued = false;
+            patchRenderPokemonCard();
+            refreshAllCards(root);
         });
     }
 
-    function installPopupObserver() {
-        const popup = getPopup();
-        if (!popup || popupObserver) return;
+    function installObserver() {
+        if (observer || !document.body) return;
 
-        popupObserver = new MutationObserver(() => {
-            scheduleRefresh();
+        observer = new MutationObserver((mutations) => {
+            let shouldRefresh = false;
+
+            for (const mutation of mutations) {
+                if (mutation.type === 'childList') {
+                    for (const node of mutation.addedNodes) {
+                        if (!(node instanceof Element)) continue;
+                        if (node.matches?.('.poke-card') || node.querySelector?.('.poke-card')) {
+                            shouldRefresh = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!shouldRefresh && mutation.type === 'attributes') {
+                    const target = mutation.target;
+                    if (target instanceof Element && (target.matches?.('.poke-card') || target.closest?.('.poke-card'))) {
+                        shouldRefresh = true;
+                    }
+                }
+
+                if (shouldRefresh) break;
+            }
+
+            if (shouldRefresh) queueRefresh();
         });
 
-        popupObserver.observe(popup, {
+        observer.observe(document.body, {
             childList: true,
             subtree: true,
             attributes: true,
-            attributeFilter: ['style']
+            attributeFilter: ['class', 'style']
         });
     }
 
     function bootstrap() {
         injectStyles();
-        installPopupObserver();
-        scheduleRefresh();
+        patchRenderPokemonCard();
+        refreshAllCards();
+        installObserver();
     }
 
     bootstrap();
 
-    bootObserver = new MutationObserver(() => {
-        bootstrap();
-    });
+    const patchTimer = setInterval(() => {
+        const patched = patchRenderPokemonCard();
+        if (patched) {
+            queueRefresh();
+            clearInterval(patchTimer);
+        }
+    }, 500);
 
-    if (document.body) {
-        bootObserver.observe(document.body, { childList: true, subtree: true });
-    }
+    setTimeout(() => clearInterval(patchTimer), 15000);
 
-    console.log('Pokelike Evolution Level Hover active');
+    console.log('Pokelike Evolution Level Text active');
 })();
