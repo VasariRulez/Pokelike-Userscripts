@@ -72,6 +72,7 @@ Current behavior:
 - Includes anti-refresh logic to avoid unnecessary DOM rebuilds when the interface updates.
 - Preserves the native popup visibility behavior controlled by the page JavaScript.
 - Can work alongside the Fairy fix script.
+- When a matchup would normally be 0×, the panel shows Struggle and 50PWR instead.
 #### Install directly
 
 Click the link below to install the script in Tampermonkey:
@@ -121,6 +122,16 @@ If Tampermonkey does not open the install page automatically, open the script UR
     <td align="center">
       <img src="src/img/WeaknessPanel/FairyFix.jpg" alt="Pokelike interface showing corrected Fairy type matchup support and updated effectiveness values" width="420"><br>
       <em>Correct Fairy-type matchup support.</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img
+        src="src/img/WeaknessPanel/ImmunitiesStruggle.jpg"
+        alt="Weakness Panel example where 0x immunities are shown as Struggle with 50PWR."
+        width="420"
+      ><br>
+      <em>When a matchup would normally be 0×, the panel shows Struggle and 50PWR instead.</em>
     </td>
   </tr>
 </table>
