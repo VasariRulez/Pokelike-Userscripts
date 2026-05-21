@@ -227,8 +227,6 @@ If Tampermonkey does not open the install page automatically, open the script UR
 
 #### Previews
 
-#### Previews
-
 <table>
   <tr>
     <td align="center">
