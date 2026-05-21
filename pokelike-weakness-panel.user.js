@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pokelike Weakness Panel
 // @namespace    https://pokelike.xyz/
-// @version      1.2.1
+// @version      1.2.2
 // @description  Adds weakness/resistance panels to Pokelike hover cards and trade rows
 // @author       VasariRulez
 // @match        https://pokelike.xyz/*
@@ -168,14 +168,14 @@
   }
 
   function bucketLabel(mult) {
-    if (mult === 0) return 'Immune';
+    if (mult === 0) return 'Struggle';
     if (mult > 1) return 'Weak';
     if (mult < 1) return 'Resist';
     return 'Neutral';
   }
 
   function moveBucketLabel(mult) {
-    if (mult === 0) return 'No effect';
+    if (mult === 0) return 'Struggle';
     if (mult > 1) return 'Strong';
     if (mult < 1) return 'Weak';
     return 'Neutral';
@@ -451,15 +451,18 @@
   }
 
   function renderRows(rows, keyName, colorFn) {
-    return rows.map(r => `
-      <div class="weakness-row">
-        <div class="weakness-row-left">
-          <span class="type-badge type-${String(r[keyName]).toLowerCase()}">${r[keyName]}</span>
-          <span class="weakness-bucket">${r.label}</span>
+    return rows.map(r => {
+      const rightText = r.mult === 0 ? '50PWR' : `${r.mult}×`;
+      return `
+        <div class="weakness-row">
+          <div class="weakness-row-left">
+            <span class="type-badge type-${String(r[keyName]).toLowerCase()}">${r[keyName]}</span>
+            <span class="weakness-bucket">${r.label}</span>
+          </div>
+          <span class="weakness-mult" style="color:${colorFn(r.mult)}">${rightText}</span>
         </div>
-        <span class="weakness-mult" style="color:${colorFn(r.mult)}">${r.mult}×</span>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   function buildWeaknessOnlyPanel(types, moveType = null) {
