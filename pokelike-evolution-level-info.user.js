@@ -8,8 +8,8 @@
 // @match        https://www.pokelike.xyz/*
 // @run-at       document-idle
 // @grant        none
-// @downloadURL  https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-evolution-level-text.user.js
-// @updateURL    https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-evolution-level-text.user.js
+// @downloadURL  https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-evolution-level-info.user.js
+// @updateURL    https://raw.githubusercontent.com/VasariRulez/Pokelike-Userscripts/main/pokelike-evolution-level-info.user.js
 // ==/UserScript==
 
 (function () {
