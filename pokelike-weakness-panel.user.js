@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pokelike Weakness Panel
 // @namespace    https://pokelike.xyz/
-// @version      1.2.3
+// @version      1.2.4
 // @description  Adds weakness/resistance panels to Pokelike hover cards and trade rows
 // @author       VasariRulez
 // @match        https://pokelike.xyz/*
@@ -696,6 +696,9 @@
 
     const winScreenCard = target.closest('#win-team .poke-card');
     if (winScreenCard) return { card: winScreenCard, mode: 'matchup-only' };
+
+    const statBuffScreenCard = target.closest('#stat-buff-choices .poke-card');
+    if (statBuffScreenCard) return { card: statBuffScreenCard, mode: 'matchup-only' };
 
     const eliteEnemy = target.closest('#elite-prep-enemy-team .elite-prep-enemy-slot');
     if (eliteEnemy) return { card: eliteEnemy, mode: 'elite-enemy' };
